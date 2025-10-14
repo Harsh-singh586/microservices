@@ -30,6 +30,7 @@ A Django-based microservices architecture for a simple e-commerce system consist
 ### 1. Manual Setup (Alternative)
 If you prefer manual setup:
 
+**Terminal 1 - User Service:**
 ```bash
 # User Service
 cd user_service
@@ -45,8 +46,9 @@ export OTEL_RESOURCE_ATTRIBUTES="service.name=user_service,service.version=1.0.0
 export OTEL_EXPORTER_OTLP_ENDPOINT="http://127.0.0.1:4318"
 export OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
 export DJANGO_SETTINGS_MODULE=user_service.settings
-deactivate
+opentelemetry-instrument python manage.py runserver 8000 --noreload
 
+**Terminal 2 - Product Service:**
 # Product Service
 cd ../product_service
 python -m venv venv
@@ -60,8 +62,9 @@ export OTEL_RESOURCE_ATTRIBUTES="service.name=product_service,service.version=1.
 export OTEL_EXPORTER_OTLP_ENDPOINT="http://127.0.0.1:4318"
 export OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
 export DJANGO_SETTINGS_MODULE=product_service.settings
-deactivate
+opentelemetry-instrument python manage.py runserver 8001 --noreload
 
+**Terminal 3 - Order Service:**
 # Order Service
 cd ../order_service
 python -m venv venv
@@ -75,41 +78,16 @@ export OTEL_RESOURCE_ATTRIBUTES="service.name=order_service,service.version=1.0.
 export OTEL_EXPORTER_OTLP_ENDPOINT="http://127.0.0.1:4318"
 export OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
 export DJANGO_SETTINGS_MODULE=order_service.settings
-deactivate
-```
-
-### 2. Run Services
-
-
-#### Option A: Manual startup (open three terminal windows)
-
-**Terminal 1 - User Service:**
-```bash
-cd user_service
-source venv/bin/activate
-opentelemetry-instrument python manage.py runserver 8000 --noreload
-
-```
-
-**Terminal 2 - Product Service:**
-```bash
-cd product_service
-source venv/bin/activate
-opentelemetry-instrument python manage.py runserver 8001 --noreload
-```
-
-**Terminal 3 - Order Service:**
-```bash
-cd order_service
-source venv/bin/activate
 opentelemetry-instrument python manage.py runserver 8002 --noreload
 ```
 
-### 3. Load Dummy Data
+### 2. Load Dummy Data
+in new terminal
+
 python create_sample_data.py
 
 ### 4. Hit sample api
-python simple_api_demo
+python simple_api_demo.py
 
 
 ## API Endpoints
