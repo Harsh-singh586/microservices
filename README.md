@@ -47,9 +47,10 @@ export OTEL_EXPORTER_OTLP_ENDPOINT="http://127.0.0.1:4318"
 export OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
 export DJANGO_SETTINGS_MODULE=user_service.settings
 opentelemetry-instrument python manage.py runserver 8000 --noreload
+```
 
 **Terminal 2 - Product Service:**
-# Product Service
+```bash
 cd ../product_service
 python -m venv venv
 source venv/bin/activate
@@ -63,9 +64,10 @@ export OTEL_EXPORTER_OTLP_ENDPOINT="http://127.0.0.1:4318"
 export OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
 export DJANGO_SETTINGS_MODULE=product_service.settings
 opentelemetry-instrument python manage.py runserver 8001 --noreload
+```
 
 **Terminal 3 - Order Service:**
-# Order Service
+```bash
 cd ../order_service
 python -m venv venv
 source venv/bin/activate
@@ -83,9 +85,9 @@ opentelemetry-instrument python manage.py runserver 8002 --noreload
 
 ### 2. Load Dummy Data
 in new terminal
-
+```bash
 python create_sample_data.py
-
+```
 ### 4. Hit sample api
 python simple_api_demo.py
 
