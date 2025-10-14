@@ -89,8 +89,9 @@ in new terminal
 python create_sample_data.py
 ```
 ### 4. Hit sample api
+```bash
 python simple_api_demo.py
-
+```
 
 ## API Endpoints
 
