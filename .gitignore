@@ -1,0 +1,236 @@
+# Django Microservices - .gitignore
+# =====================================
+
+# Virtual Environments
+venv/
+venv/*
+*/venv/
+*/venv/*
+env/
+ENV/
+.venv/
+.env/
+user_service/venv/
+user_service/venv/*
+product_service/venv/
+product_service/venv/*
+order_service/venv/
+order_service/venv/*
+**/venv/
+**/venv/*
+
+# SQLite Database Files
+*.sqlite3
+*.sqlite
+*.db
+db_*.sqlite3
+**/db_*.sqlite3
+user_service/db_user_service.sqlite3
+product_service/db_product_service.sqlite3
+order_service/db_order_service.sqlite3
+user_service/*.sqlite3
+product_service/*.sqlite3
+order_service/*.sqlite3
+
+# Django
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+static/
+
+# Django Migrations
+*/migrations/__pycache__/
+*/migrations/*.pyc
+**/migrations/__pycache__/
+**/migrations/*.pyc
+user_service/*/migrations/__pycache__/
+product_service/*/migrations/__pycache__/
+order_service/*/migrations/__pycache__/
+
+# Exclude ALL Django migration files (uncomment if needed)
+*/migrations/0*.py
+**/migrations/0*.py
+user_service/*/migrations/0*.py
+product_service/*/migrations/0*.py  
+order_service/*/migrations/0*.py
+user_service/users/migrations/
+product_service/products/migrations/
+order_service/orders/migrations/
+# Keep __init__.py files
+!*/migrations/__init__.py
+!**/migrations/__init__.py
+
+# Environment Variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+
+# IDE and Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Operating System
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Python
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Translations
+*.mo
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+.pybuilder/
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# poetry
+poetry.lock
+
+# celery beat schedule file
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# pytype static type analyzer
+.pytype/
+
+# Cython debug symbols
+cython_debug/
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+.tmp/
+.temp/
+
+# Backup files
+*.bak
+*.backup
+
+# Package files
+*.tar.gz
+*.zip
+*.rar
+
+# Local configuration files
+local_config.py
+config_local.py
+
+# OpenTelemetry and Monitoring
+.otel/
+traces/
+metrics/
+
+# Docker (if using Docker later)
+Dockerfile.local
+docker-compose.override.yml
+.dockerignore
+
+# Node modules (if using any frontend tools)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

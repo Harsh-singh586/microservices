@@ -1,0 +1,8 @@
+Django==4.2.7
+djangorestframework==3.14.0
+django-cors-headers==4.3.1
+requests==2.31.0
+python-decouple==3.8
+opentelemetry-distro==0.43b0
+opentelemetry-instrumentation==0.43b0
+opentelemetry-exporter-otlp==1.22.0
