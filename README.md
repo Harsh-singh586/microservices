@@ -9,20 +9,35 @@ A Django-based microservices architecture for a simple e-commerce system consist
 ## Architecture
 
 ```
-┌─────────────────┐    HTTP/JSON    ┌──────────────────┐
-│   User Service  │◄───────────────►│  Product Service │
-│   Port: 8000    │                 │   Port: 8001     │
-└─────────────────┘                 └──────────────────┘
-         ▲                                    ▲
-         │                                    │
-         │            HTTP/JSON               │
-         │                                    │
-         ▼                                    ▼
-┌─────────────────────────────────────────────────────┐
-│                Order Service                        │
-│                Port: 8002                          │
-└─────────────────────────────────────────────────────┘
+┌─────────────────┐                    ┌──────────────────┐
+│   User Service  │                    │  Product Service │
+│   Port: 8000    │                    │   Port: 8001     │
+│                 │    NO DIRECT       │                  │
+│   - Users       │    COMMUNICATION   │   - Products     │
+│   - Profiles    │                    │   - Inventory    │
+└─────────────────┘                    └──────────────────┘
+         ▲                                        ▲
+         │                                        │
+         │ HTTP/JSON                   HTTP/JSON  │
+         │ (User Info)              (Stock Check) │
+         │                           (Inventory)  │
+         ▼                                        ▼
+┌─────────────────────────────────────────────────────────┐
+│               Order Service (Port: 8002)                │
+│                                                         │
+│  🔄 Orchestrates business operations:                   │
+│  • Validates users via User Service                    │
+│  • Checks stock via Product Service                    │
+│  • Updates inventory via Product Service               │
+│  • Coordinates order creation with transactions        │
+└─────────────────────────────────────────────────────────┘
 ```
+
+### Communication Pattern
+- **Hub-and-Spoke Architecture**: Order Service acts as the orchestrator
+- **No Direct Service-to-Service**: User and Product services are decoupled
+- **Synchronous HTTP/JSON**: All inter-service communication via REST APIs
+- **Transaction Safety**: Order creation with automatic rollback on failures
 
 ## Setup Instructions
 
