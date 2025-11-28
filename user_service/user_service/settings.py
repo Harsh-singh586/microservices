@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -75,14 +77,31 @@ WSGI_APPLICATION = "user_service.wsgi.application"
 
 
 # Database
+# Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db_user_service.sqlite3",
+# Use DATABASE_URL environment variable if available (Docker), otherwise SQLite
+DATABASE_URL = os.environ.get('DATABASE_URL')
+
+if DATABASE_URL:
+    # PostgreSQL configuration for Docker
+    DATABASES = {
+        'default': dj_database_url.parse(DATABASE_URL)
     }
-}
+    # Add connection pooling
+    DATABASES['default']['CONN_MAX_AGE'] = 600  # 10 minutes
+    DATABASES['default']['OPTIONS'] = {
+        'connect_timeout': 10,
+    }
+else:
+    # SQLite configuration for local development
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db_user_service.sqlite3",
+        }
+    }
+
 
 
 # Password validation

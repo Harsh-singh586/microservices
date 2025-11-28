@@ -14,3 +14,6 @@ class UserProfile(models.Model):
 
     class Meta:
         db_table = 'user_profile'
+        indexes = [
+            models.Index(fields=['user'], name='user_profile_user_idx'),
+        ]

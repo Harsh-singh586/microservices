@@ -1,0 +1,200 @@
+version: '3.8'
+
+services:
+  # PostgreSQL for User Service
+  user_db:
+    image: postgres:15-alpine
+    container_name: user_service_db
+    environment:
+      POSTGRES_DB: user_service_db
+      POSTGRES_USER: user_service_user
+      POSTGRES_PASSWORD: user_service_pass
+    command: postgres -c max_connections=200 -c shared_buffers=171MB -c max_prepared_transactions=17 -c effective_cache_size=341MB -c maintenance_work_mem=43MB
+    volumes:
+      - user_db_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    networks:
+      - microservices_network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.33'
+          memory: 683M
+        reservations:
+          cpus: '0.17'
+          memory: 341M
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user_service_user -d user_service_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # User Service
+  user_service:
+    build:
+      context: ./user_service
+      dockerfile: Dockerfile
+    container_name: user_service_app
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=True
+      - DATABASE_URL=postgresql://user_service_user:user_service_pass@user_db:5432/user_service_db
+      - DJANGO_SETTINGS_MODULE=user_service.settings
+    depends_on:
+      user_db:
+        condition: service_healthy
+    networks:
+      - microservices_network
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1024M
+        reservations:
+          cpus: '0.50'
+          memory: 512M
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/users/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # PostgreSQL for Product Service
+  product_db:
+    image: postgres:15-alpine
+    container_name: product_service_db
+    environment:
+      POSTGRES_DB: product_service_db
+      POSTGRES_USER: product_service_user
+      POSTGRES_PASSWORD: product_service_pass
+    command: postgres -c max_connections=200 -c shared_buffers=171MB -c max_prepared_transactions=17 -c effective_cache_size=341MB -c maintenance_work_mem=43MB
+    volumes:
+      - product_db_data:/var/lib/postgresql/data
+    ports:
+      - "5434:5432"
+    networks:
+      - microservices_network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.33'
+          memory: 683M
+        reservations:
+          cpus: '0.17'
+          memory: 341M
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U product_service_user -d product_service_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Product Service
+  product_service:
+    build:
+      context: ./product_service
+      dockerfile: Dockerfile
+    container_name: product_service_app
+    ports:
+      - "8001:8001"
+    environment:
+      - DEBUG=True
+      - DATABASE_URL=postgresql://product_service_user:product_service_pass@product_db:5432/product_service_db
+      - DJANGO_SETTINGS_MODULE=product_service.settings
+    depends_on:
+      product_db:
+        condition: service_healthy
+    networks:
+      - microservices_network
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1024M
+        reservations:
+          cpus: '0.50'
+          memory: 512M
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8001/products/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # PostgreSQL for Order Service
+  order_db:
+    image: postgres:15-alpine
+    container_name: order_service_db
+    environment:
+      POSTGRES_DB: order_service_db
+      POSTGRES_USER: order_service_user
+      POSTGRES_PASSWORD: order_service_pass
+    command: postgres -c max_connections=200 -c shared_buffers=171MB -c max_prepared_transactions=17 -c effective_cache_size=341MB -c maintenance_work_mem=43MB
+    volumes:
+      - order_db_data:/var/lib/postgresql/data
+    ports:
+      - "5435:5432"
+    networks:
+      - microservices_network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.34'
+          memory: 683M
+        reservations:
+          cpus: '0.17'
+          memory: 341M
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U order_service_user -d order_service_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Order Service
+  order_service:
+    build:
+      context: ./order_service
+      dockerfile: Dockerfile
+    container_name: order_service_app
+    ports:
+      - "8002:8002"
+    environment:
+      - DEBUG=True
+      - DATABASE_URL=postgresql://order_service_user:order_service_pass@order_db:5432/order_service_db
+      - DJANGO_SETTINGS_MODULE=order_service.settings
+      - USER_SERVICE_URL=http://user_service:8000
+      - PRODUCT_SERVICE_URL=http://product_service:8001
+    depends_on:
+      order_db:
+        condition: service_healthy
+      user_service:
+        condition: service_healthy
+      product_service:
+        condition: service_healthy
+    networks:
+      - microservices_network
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1024M
+        reservations:
+          cpus: '0.50'
+          memory: 512M
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8002/orders/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  user_db_data:
+  product_db_data:
+  order_db_data:
+
+networks:
+  microservices_network:
+    driver: bridge
