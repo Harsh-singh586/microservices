@@ -27,7 +27,7 @@ SECRET_KEY = "django-insecure--eejid0y6(@@44xhgirif=c#er6jr#*35qnl7+4_y82)bz5izn
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
+ALLOWED_HOSTS = ['*']  # Allow all hosts for development/Docker
 
 
 # Application definition
@@ -166,8 +166,8 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 # External Services URLs
-USER_SERVICE_URL = "http://localhost:8000"
-PRODUCT_SERVICE_URL = "http://localhost:8001"
+USER_SERVICE_URL = os.environ.get('USER_SERVICE_URL', 'http://localhost:8000')
+PRODUCT_SERVICE_URL = os.environ.get('PRODUCT_SERVICE_URL', 'http://localhost:8001')
 
 # OpenTelemetry Database Configuration
 import os

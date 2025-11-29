@@ -27,7 +27,7 @@ SECRET_KEY = "django-insecure-t215wq@veo#*z1&bw0ryr&$f0hp=!i=8%rw_c0*6%34l@v_ygm
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
+ALLOWED_HOSTS = ['*']  # Allow all hosts for development/Docker
 
 
 # Application definition
